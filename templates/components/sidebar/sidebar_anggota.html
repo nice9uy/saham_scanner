@@ -1,0 +1,177 @@
+{% load static %}
+
+<aside id="drawer-navigation" class=" bg-amber-300 mt-16 fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full border-r border-t text-white border-gray-200 xl:translate-x-0" aria-label="Sidenav">
+  <div class="overflow-y-auto py-5 px-3 h-full bg-gray-800 text-white">
+    <ul class="space-y-2">
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/anggota/" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">ANGGOTA</span>
+        </a>
+      </li>
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/user/fff" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">ADMIN BAGIAN/BIDANG</span>
+        </a>
+      </li>
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/user/fff" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">KASUBBAG MINPEG</span>
+        </a>
+      </li>
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/user/fff" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">ANGGOTA MINPEG</span>
+        </a>
+      </li>
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/user/fff" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">SPRI</span>
+        </a>
+      </li>
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/user/fff" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">DUPLIKAT JABATAN</span>
+        </a>
+      </li>
+      <li>
+        <a
+          type="button"
+          class="
+                 flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                 {% if request.path == "/accounts/user/fff" %}
+                   bg-blue-700 font-bold
+                 {% else %}
+                   hover:bg-blue-600 hover:text-white hover:font-bold
+                 {% endif %}
+                "
+          href=""
+        >
+          <span class="flex-1 ml-3 text-left whitespace-nowrap">GANTI/UBAH JABATAN</span>
+        </a>
+      </li>
+      <li>
+        {% if jumlah_beda_jabatan == 0 %}
+          <a
+            type="button"
+            class="
+                   flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                   {% if request.path == "/accounts/user/fff" %}
+                     bg-blue-700 font-bold
+                   {% else %}
+                     hover:bg-blue-600 hover:text-white hover:font-bold
+                   {% endif %}
+                  "
+            href=""
+          >
+            <span class="flex-1 ml-3 text-left whitespace-nowrap">JABATAN TIDAK SESUAI
+
+            </span>
+          </a>
+        {% else %}
+          <a
+            type="button"
+            class="
+                   relative
+                   flex items-center p-2 w-full text-base font-medium focus:outline-none text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 rounded-lg
+                   {% if request.path == '/accounts/user/fff' %}
+                     bg-red-700 font-bold
+                   {% else %}
+                     hover:bg-red-500 hover:text-white hover:font-bold
+                   {% endif %}
+                  "
+            href=""
+          >
+            <span class="flex-1 ml-3 text-left whitespace-nowrap">JABATAN TIDAK SESUAI</span>
+            <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{{ jumlah_beda_jabatan }}</div>
+          </a>
+        {% endif %}
+      </li>
+
+      {% comment %} {% for data in kapus  %}
+        <li>
+          <a
+            type="button"
+            class="
+                   flex items-center p-2 w-full text-base font-medium text-white rounded-lg transition duration-75 group cursor-pointer
+                   {% if request.path == "/accounts/settings/"|add:data|add:'/' %}
+                     bg-blue-700 font-bold
+                   {% else %}
+                     hover:bg-blue-600 hover:text-white hover:font-bold
+                   {% endif %}
+                  "
+            href=""
+          >
+            <span class="flex-1 ml-3 text-left whitespace-nowrap">{{data | upper}}</span>
+          </a>
+        </li>
+      {% endfor %} {% endcomment %}
+    </ul>
+
+  </div>
+</aside>

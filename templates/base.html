@@ -1,0 +1,91 @@
+{% load static %}
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {% compress css %}
+      <link rel="stylesheet" href="{% static 'css/loader.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/tabulator_site_dark.min.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/tailwindcss.css' %}" />
+      <link rel="stylesheet" href="{% static 'css/sweetalert2.min.css' %}" />
+    {% endcompress %}
+
+    <link rel="icon" type="image/x-icon" href="{% static 'img/kemhan.png' %}" />
+
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    <title>{{ page_title }}</title>
+  </head>
+
+  <body style="" class="bg-gray-800 font-sans font-stretch-ultra-expanded ">
+    <div id="preloader">
+      <div class="loader"></div>
+    </div>
+
+    <div id="content" style="display: none;">
+
+    
+
+      {% block login %}
+      {% endblock %}
+
+   
+
+
+    </div>
+
+    {% compress js %}
+
+      <script>
+        // 4. Sembunyikan preloader setelah SEMUA resources selesai dimuat
+        window.addEventListener('load', () => {
+          const preloader = document.getElementById('preloader');
+          const content = document.getElementById('content');
+
+            // Tampilkan konten utama
+          content.style.display = 'block';
+
+            // Sembunyikan preloader dengan animasi fade
+          setTimeout(() => {
+            preloader.classList.add('hidden');
+          }, 0); // Waktu untuk memastikan konten sudah ter-render
+
+            // Hilangkan preloader dari DOM setelah animasi
+          setTimeout(() => {
+            preloader.style.display = 'none';
+          }, 0); // Sesuaikan dengan durasi transisi CSS (0.3s + buffer)
+        });
+
+      </script>
+
+
+      <script type="text/javascript" src="{% static 'js/sweetalert2.all.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/tabulator.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/htmx.min.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/flowbite.min.js' %}" defer ></script>
+
+    <!-- SweetAlert Trigger -->
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          {% if messages %}
+            {% for message in messages %}
+              Swal.fire({
+                title: '{{ message.tags|title }}',
+                text: '{{ message|escapejs }}',
+                icon: '{{ message.tags }}',
+                confirmButtonText: 'Ok'
+              });
+            {% endfor %}
+          {% endif %}
+        });
+      </script>
+
+    {% endcompress %}
+
+
+
+  </body>
+</html>

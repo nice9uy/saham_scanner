@@ -1,0 +1,13 @@
+[project]
+name = "saham-sanner"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.2.6",
+    "django-compressor>=4.5.1",
+    "pandas-ta>=0.4.71b0",
+    "ruff>=0.13.1",
+    "yfinance>=0.2.66",
+]

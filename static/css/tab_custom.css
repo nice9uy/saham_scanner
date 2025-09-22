@@ -1,0 +1,16 @@
+.nav-tabs .nav-link {
+    border: none; /* Menghilangkan border default */
+    border-bottom: 5px solid transparent; /* Garis bawah transparan */
+    padding: 0.5rem 1rem; /* Menyesuaikan padding */
+  }
+
+  /* Gaya untuk tab aktif */
+  .nav-tabs .nav-link.active {
+    border-bottom: 5px solid #0d6efd; /* Garis bawah tebal dengan warna biru */
+    color:rgb(29, 252, 0); /* Warna teks aktif */
+  }
+
+  /* Efek hover pada tab */
+  .nav-tabs .nav-link:hover {
+    border-bottom: 5px solidrgb(13, 253, 13); /* Garis bawah tebal saat hover */
+    color: #0d6efd; /* Warna teks saat hover */}

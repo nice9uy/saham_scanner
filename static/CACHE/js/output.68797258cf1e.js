@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){Swal.fire({title:'Success',text:'Anggota berhasil ditambahkan.',icon:'success',confirmButtonText:'Ok'});});;
