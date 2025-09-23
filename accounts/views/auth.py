@@ -11,33 +11,25 @@ def clean_input(input_str):
 
 
 def login_view(request):
-    tahun_sekarang = datetime.now().year
+    context = {"page_title": "login"}
 
-    get_copyright = copyright
-
-    context = {
-        "page_title": "LOGIN",
-        "tahun": tahun_sekarang,
-        "get_copyright": get_copyright,
-    }
 
     if request.method == "POST":
-        username_login = clean_input(request.POST.get("nip", ""))
-        password_login = clean_input(request.POST.get("password", ""))
+        # Cek apakah 'username' dan 'password' ada di POST
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-        user = authenticate(
-            request=request, nip=username_login, password=password_login
-        )
+        
+        if not username or not password:
+            messages.error(request, "Username dan password wajib diisi.")
+            return render(request, 'auth.html')
 
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            if password_login == "baranahan123":
-                messages.warning(request, "Demi keamanan segera ganti Password!!!")
-                return redirect("dashboard")
-            return redirect("dashboard")
+            return redirect('home:dashboard')  # Ganti 'home' dengan nama URL tujuan
         else:
-            messages.error(request, "Periksa kembali NIP dan Password Anda benar!!!")
-            return redirect("login")
+            messages.error(request, "Username atau password salah.")
 
     return render(request, "auth.html", context)
 

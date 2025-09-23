@@ -2,22 +2,22 @@
 {% load static %}
 {% block login %}
   <div class="container max-w-full px-0 mx-0">
-    <section style="background-image: url({% static 'img/kemhan.jpg' %});" class="w-full h-auto bg-no-repeat bg-cover bg-center bg-gray-700 bg-blend-multiply">
+    <section style="background-image: url({% static 'img/saham.jpg' %});" class="w-full h-auto bg-no-repeat bg-cover bg-center bg-gray-700 bg-blend-multiply">
       <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen">
         <a href="{% url 'login' %}" class="flex items-center mb-6 text-2xl font-semibold text-white">
-          <img class="w-45 h-45 mr-2" src="{% static 'img/kemhan_logo.png' %}" alt="logo" />
+
         </a>
-        <div class="text-white font-bold text-2xl md:text-3xl mb-5 text-center">BADAN LOGISTIK PERTAHANAN KEMHAN</div>
+        <div class="text-white font-bold text-2xl md:text-3xl mb-5 text-center">SAHAM SCANNER</div>
 
     <!-- Perbaiki max-w agar lebih responsif -->
         <div class="w-full max-w-lg mx-auto rounded-lg shadow bg-gray-800">
           <div class="p-6 space-y-4 md:space-y-6 lg:space-y-8 sm:p-8">
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-center text-white md:text-2xl">MANAGEMENT ARSIP</h1>
+            <h1 class="text-xl font-bold leading-tight tracking-tight text-center text-white md:text-2xl">LOGIN</h1>
             <form class="space-y-4 md:space-y-6" method="POST" action="{% url 'auth:login' %}">
               {% csrf_token %}
               <div>
-                <label for="nip" class="block mb-2 text-sm font-bold text-white">NIP</label>
-                <input type="text" name="nip" id="nip" class="bg-gray-600 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="12345678901234">
+                <label for="nip" class="block mb-2 text-sm font-bold text-white">USERNAME</label>
+                <input type="text" name="username" id="username" class="bg-gray-600 border border-gray-300 text-gray-900 sm:text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 placeholder:text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="12345678901234">
               </div>
               <div>
                 <label for="password" class="block mb-2 text-sm font-bold text-white">PASSWORD</label>

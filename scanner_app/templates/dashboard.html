@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+{% comment %} {% load humanize %} {% endcomment %}
+
+
+{% block dashboard %}
+  <div class="antialiased bg-gray-800  ">
+
+    {% include 'components/header/index.html' %}
+
+    <main class="p-4 pt-20 ">
+
+      {% comment %} <div class=" mx-auto">
+        <div class="flex flex-wrap justify-between gap-4 w-full">
+
+
+          <div class="text-white border-gray-400 rounded-lg h-32">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-2xl font-bold text-white truncate">TOTAL EMITEN</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-yellow-300">{{ total_emiten }} </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div class="text-white border-gray-400 rounded-lg h-32">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">EMITEN NAIK </dt>
+                  <dt class="text-xl font-bold text-white truncate"> </dt>
+                  <dd class="mt-1 text-2xl font-semibold text-yellow-300">Rp. </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+         <!-- Kotak 2 -->
+          <div class="text-white border-gray-400 rounded-lg h-32">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">EMITEN TURUN</dt>
+                  <dt class="text-xl font-bold text-white truncate"></dt>
+                  <dd class="mt-1 text-2xl font-semibold text-yellow-300"></dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+           <!-- Kotak 3 -->
+          <div class="text-white border-gray-400 rounded-lg h-32">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">EMITEN AKAN NAIK</dt>
+                  <dt class="text-xl font-bold text-white truncate"> </dt>
+                  <dd class="mt-1 text-2xl font-semibold text-yellow-300"> </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-white border-gray-400 rounded-lg h-32">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">EMITEN AKAN NAIK</dt>
+                  <dt class="text-xl font-bold text-white truncate"> </dt>
+                  <dd class="mt-1 text-2xl font-semibold text-yellow-300"> </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+           <!-- Kotak 4 -->
+        </div>
+      </div> {% endcomment %}
+
+
+      <div class="mx-auto w-full px-4">
+        <div class="flex flex-wrap justify-between gap-4 w-full">
+
+          <a href="" class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-2xl font-bold text-white truncate">TOTAL EMITEN</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-yellow-300">{{ total_emiten }}</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
+
+          <a href="" class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">SEDANG NAIK</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-green-400">123</dd>
+                </dl>
+              </div>
+            </div>
+          </a>
+
+          <div class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">SEDANG TURUN</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-red-400">45</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">AKAN NAIK</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-blue-300">67</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">AKAN TURUN</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-gray-300">89</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">NETRAL</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-gray-300">89</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+          
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+  </div>
+
+  <div class="p-4 pt-1">
+
+  </div>
+
+  <div class="">
+    {% comment %} {% include 'copyright.html' %} {% endcomment %}
+    {% comment %} {% else %}
+    {% endif %} {% endcomment %}
+  </div>
+
+
+  {% include 'modal/scanner_app/upload_emiten.html' %}
+
+
+
+{% endblock %}

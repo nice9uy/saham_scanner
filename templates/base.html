@@ -14,9 +14,9 @@
       <link rel="stylesheet" href="{% static 'css/sweetalert2.min.css' %}" />
     {% endcompress %}
 
-    <link rel="icon" type="image/x-icon" href="{% static 'img/kemhan.png' %}" />
+    {% comment %} <link rel="icon" type="image/x-icon" href="{% static 'img/saham_gambar.jpg' %}" /> {% endcomment %}
 
-    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    {% comment %} <link rel="icon" href="{% static 'img/saham_gambar.jpg' %}" type="image/x-icon" /> {% endcomment %}
     <title>{{ page_title }}</title>
   </head>
 
@@ -27,12 +27,15 @@
 
     <div id="content" style="display: none;">
 
-    
+
 
       {% block login %}
       {% endblock %}
 
-   
+      {% block dashboard %}
+      {% endblock  %}
+
+
 
 
     </div>
