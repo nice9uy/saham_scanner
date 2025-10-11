@@ -11,13 +11,20 @@ from ..models import DaftarEmiten
 def dashboard(request):
     total_emiten = DaftarEmiten.objects.all().count()
 
+
+
+
     # print(json.dumps(xdata, indent=4, ensure_ascii=False))
 
-    # tickers = ["BBCA", "BBRI", "TLKM", "ASII"]
+    # tickers = ["BBCA.JK"]
+
 
     # tickers_jk = [t + ".JK" for t in tickers]
 
-    # data = yf.download(tickers, period="1d", group_by="ticker")
+    # data = yf.download(tickers, period="1y", group_by="ticker")
+
+    # data.to_csv
+
 
     # for ticker in tickers_jk:
     #     if ticker in data.columns:
@@ -68,3 +75,8 @@ def upload_emiten(request):
             messages.error(request, "Tidak ada file yang diupload!!")
 
     return redirect("home:dashboard")
+
+
+def daftar_saham(request):
+
+    return render(request, "tabel/daftar_emiten.html")

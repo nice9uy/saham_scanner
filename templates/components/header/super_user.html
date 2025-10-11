@@ -68,7 +68,7 @@
       </button>
       <!-- Dropdown menu -->
       <div class="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-gray-900 divide-y divide-gray-900 shadow-lg rounded-xl" id="apps-dropdown">
-        <div class="block py-2 px-4 text-base font-medium text-center text-white bg-gray-900">APLIKASI</div>
+        <div class="block py-2 px-4 text-base font-medium text-center text-white bg-gray-900">DAFTAR MENU</div>
         <div class="grid grid-cols-3 gap-3 p-3">
           <a href="{% url 'home:dashboard' %}" class="block p-4 text-center rounded-lg hover:bg-gray-600 group">
             <svg aria-hidden="true" class="mx-auto mb-1 w-7 h-7 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -82,6 +82,12 @@
             </svg>
             <div class="text-sm text-center text-white">UPLOAD EMITEN</div>
           </button>
+          <a href="{% url 'home:daftar_saham' %}" class="block p-4 text-center rounded-lg hover:bg-gray-600 group">
+            <svg class="w-7 h-7 mx-auto text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M8 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1h2a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2Zm6 1h-4v2H9a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2h-1V4Zm-3 8a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Zm2 5a1 1 0 0 1 1-1h3a1 1 0 1 1 0 2h-3a1 1 0 0 1-1-1Zm-2-1a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H9Z" clip-rule="evenodd"/>
+            </svg>
+            <div class="text-sm text-center text-white">DAFTAR SAHAM</div>
+          </a>
         </div>
       </div>
       <button type="button" class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">

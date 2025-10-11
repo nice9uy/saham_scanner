@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block daftar_emiten %}
+
+  <div class="antialiased">
+    {% include 'components/header/index.html' %}
+
+    <div class="p-2" >
+      <div class="flex justify-between ">
+        <span class="pt-18 ml-2 mb-2 text-white font-medium text-2xl text-center">DAFTAR EMITEN</span>
+      </div>
+
+      <main class="bg-white " id="tabel_eselon1">
+        <div class="bg-white w-full" id="tabel_eselon1"></div>
+
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            var table = new Tabulator("#tabel_eselon1", {
+              layout: "fitColumns",
+              responsiveLayout: "collapse",
+              ajaxURL: "",
+              ajaxParams: {
+                page: 1,
+                size: 15,
+              },
+              ajaxConfig: "GET",
+              pagination: true,
+              paginationMode: "remote", // fetch page dari server
+              paginationSize: 50,
+              paginationSizeSelector: [50],
+              paginationDataSent: {
+                "page": "page",   // Kirim ?page=2
+                "size": "size",   // Kirim ?size=15
+              },
+              paginationDataReceived: {
+                "last_page": "last_page",  // Harus match dengan JSON response
+                "data": "data"
+              },
+              placeholder: "Data tidak tersedia",
+              dataTree: true,
+              dataTreeStartExpanded: false,
+              columns: [
+                {
+                  title: "SATKER",
+                  field: "nama_satker_singkat",
+                  headerHozAlign: "center",
+                },
+                {
+                  title: "NAMA LENGKAP SATKER",
+                  field: "nama_satker_lengkap",
+                  headerHozAlign: "center"
+                },
+                {
+                  title: "AKSI",
+                  field: "actions",
+                  hozAlign: "center",
+                  headerHozAlign: "center",
+                  formatter: function(cell, formatterParams, onRendered) {
+                    const data = cell.getRow().getData();
+
+                    return `
+                    <div class="flex space-x-2 justify-center">
+                        <!-- Tombol Nonaktif -->
+                        <button data-modal-target="non_aktif${data}" data-modal-toggle="non_aktif${data}" class="non_aktif_organisasi bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:ring-4 focus:ring-red-300" title="NON AKTIF">
+                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                        <button data-modal-target="edit${data}" data-modal-toggle="edit${data}" class="edit_organisasi bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded focus:ring-4 focus:ring-green-300" title="EDIT">
+                            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    `;
+                  },
+                  cellClick: function(e, cell) {
+                    const data = cell.getRow().getData();
+                    const id = data.id;
+
+                    const nonAktifBtn = e.target.closest('.non_aktif_organisasi');
+                    if (nonAktifBtn) {
+                      const modal = new Modal(document.getElementById(`non_aktif${id}`));
+                      modal.show();
+                    }
+
+                    const editBtn = e.target.closest('.edit_organisasi');
+                    if (editBtn) {
+                      const modal = new Modal(document.getElementById(`edit${id}`));
+                      modal.show();
+                    }
+                  }
+                }
+              ],
+
+              ajaxError: function(xhr, textStatus, errorThrown) {
+                console.error("Ajax Error:", textStatus, errorThrown);
+              }
+            });
+          });
+        </script>
+
+      </main>
+
+    </div>
+  </div>
+
+  {% comment %} {% include 'modal/accounts/struktur_organisasi/tambah/eselon1.html' %}
+  {% include 'modal/accounts/struktur_organisasi/tambah/eselon2.html' %}
+  {% include 'modal/accounts/struktur_organisasi/tambah/eselon3.html' %}
+  {% include 'modal/accounts/struktur_organisasi/tambah/eselon4.html' %}
+  {% include 'modal/accounts/struktur_organisasi/tambah/staff.html' %}
+  {% include 'modal/accounts/struktur_organisasi/tambah/fungsional.html' %}
+  {% include 'modal/accounts/struktur_organisasi/edit/index.html' %}
+  {% include 'modal/accounts/non_aktif/non_aktif_jabatan.html' %} {% endcomment %}
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fungsi untuk menginisialisasi semua modal
+      function initializeModals(modalPrefix) {
+        document.querySelectorAll('[id^="' + modalPrefix + '"]').forEach(function (modalElement) {
+          if (!modalElement.hasAttribute('data-initialized')) {
+            new Modal(modalElement);
+            modalElement.setAttribute('data-initialized', 'true');
+          }
+        });
+      }
+
+        // Inisialisasi kedua jenis modal
+      initializeModals('non_aktif');
+      initializeModals('edit');
+    });
+  </script>
+
+
+  <div class="">
+    {% if get_copyright == True %}
+      {% include 'copyright.html' %}
+    {% else %}
+    {% endif %}
+  </div>
+{% endblock %}
