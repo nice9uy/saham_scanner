@@ -7,97 +7,151 @@
     {% include 'components/header/index.html' %}
 
     <div class="p-2" >
-      <div class="flex justify-between ">
-        <span class="pt-18 ml-2 mb-2 text-white font-medium text-2xl text-center">DAFTAR EMITEN</span>
+      <div class="flex justify-between items-center gap-4 px-4 py-2 mt-14">
+        <span class="text-white font-medium text-2xl shrink-0">DAFTAR EMITEN</span>
+        <div class="relative w-64">
+          <input
+            type="text"
+            id="input"
+            placeholder="Cari emiten..."
+            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+          <button id="clear-search" class="absolute right-2 top-2.5 text-white hover:text-white hidden">
+            ✕
+          </button>
+        </div>
       </div>
-
-      <main class="bg-white " id="tabel_eselon1">
-        <div class="bg-white w-full" id="tabel_eselon1"></div>
+      <main class="bg-white" id="tabel_eselon1" style="width: 100%;" >
+        <div class="bg-white " id="tabel_eselon1"></div>
 
         <script>
           document.addEventListener("DOMContentLoaded", function () {
-            var table = new Tabulator("#tabel_eselon1", {
-              layout: "fitColumns",
+            const searchInput = document.getElementById("input");
+            const clearButton = document.getElementById("clear-search");
+            let table;
+
+            function reloadTable(searchTerm = "") {
+
+              if (searchTerm.length < 1 && searchTerm !== "") {
+                table.setData([]); // Kosongkan tabel
+                return;
+              }
+              table.setData(
+                "{% url 'daftar_saham:daftar_saham_api' %}",
+                {
+                  page: 1,
+                  size: 15,
+                  search: searchTerm
+                }
+              );
+            }
+
+            table = new Tabulator("#tabel_eselon1", {
+              layout:"fitColumns",
               responsiveLayout: "collapse",
-              ajaxURL: "",
+              ajaxURL: "{% url 'daftar_saham:daftar_saham_api' %}",
+
               ajaxParams: {
                 page: 1,
                 size: 15,
+                search: ""
               },
               ajaxConfig: "GET",
               pagination: true,
-              paginationMode: "remote", // fetch page dari server
-              paginationSize: 50,
-              paginationSizeSelector: [50],
+              paginationMode: "remote",
+              paginationSize: 15,
+              paginationSizeSelector: false, // nonaktifkan selector ukuran halaman
               paginationDataSent: {
-                "page": "page",   // Kirim ?page=2
-                "size": "size",   // Kirim ?size=15
+                "page": "page",
+                "size": "size",
               },
               paginationDataReceived: {
-                "last_page": "last_page",  // Harus match dengan JSON response
+                "last_page": "last_page",
                 "data": "data"
               },
-              placeholder: "Data tidak tersedia",
-              dataTree: true,
-              dataTreeStartExpanded: false,
+              placeholder: "Tidak ada data emiten ditemukan",
               columns: [
                 {
-                  title: "SATKER",
-                  field: "nama_satker_singkat",
+                  title: "NO",
+                  field: "no",
+                  hozAlign: "center",
+                  headerHozAlign: "center",
+                  formatter: function (cell) {
+                    const page = cell.getTable().getPage();
+                    const pageSize = cell.getTable().getPageSize();
+                    return (page - 1) * pageSize + cell.getRow().getPosition(true);
+                  },
+                },
+                {
+                  title: "KODE EMITEN",
+                  field: "kode_emiten",
                   headerHozAlign: "center",
                 },
                 {
-                  title: "NAMA LENGKAP SATKER",
-                  field: "nama_satker_lengkap",
-                  headerHozAlign: "center"
+                  title: "NAMA PERUSAHAAN",
+                  field: "nama_perusahaan",
+                  headerHozAlign: "center",
                 },
                 {
                   title: "AKSI",
                   field: "actions",
                   hozAlign: "center",
                   headerHozAlign: "center",
-                  formatter: function(cell, formatterParams, onRendered) {
+                  formatter: function(cell) {
                     const data = cell.getRow().getData();
-
                     return `
-                    <div class="flex space-x-2 justify-center">
-                        <!-- Tombol Nonaktif -->
-                        <button data-modal-target="non_aktif${data}" data-modal-toggle="non_aktif${data}" class="non_aktif_organisasi bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:ring-4 focus:ring-red-300" title="NON AKTIF">
-                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12"/>
-                            </svg>
+                      <div class="flex justify-center">
+                        <button 
+                          data-modal-target="delete${data.id}" 
+                          data-modal-toggle="delete${data.id}" 
+                          class="delete bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded focus:ring-2 focus:ring-red-300" 
+                          title="Nonaktifkan">
+                          <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
                         </button>
-                        <button data-modal-target="edit${data}" data-modal-toggle="edit${data}" class="edit_organisasi bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded focus:ring-4 focus:ring-green-300" title="EDIT">
-                            <svg class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
-                            </svg>
-                        </button>
-                    </div>
+                      </div>
                     `;
                   },
                   cellClick: function(e, cell) {
                     const data = cell.getRow().getData();
                     const id = data.id;
-
-                    const nonAktifBtn = e.target.closest('.non_aktif_organisasi');
+                    const nonAktifBtn = e.target.closest('.delete');
                     if (nonAktifBtn) {
-                      const modal = new Modal(document.getElementById(`non_aktif${id}`));
-                      modal.show();
-                    }
-
-                    const editBtn = e.target.closest('.edit_organisasi');
-                    if (editBtn) {
-                      const modal = new Modal(document.getElementById(`edit${id}`));
-                      modal.show();
+                      const modalEl = document.getElementById(`delete${id}`);
+                      if (modalEl) {
+                        const modal = new Modal(modalEl);
+                        modal.show();
+                      }
                     }
                   }
                 }
               ],
-
               ajaxError: function(xhr, textStatus, errorThrown) {
-                console.error("Ajax Error:", textStatus, errorThrown);
+                console.error("Gagal memuat data:", textStatus, errorThrown);
+                alert("Gagal memuat data. Silakan coba lagi.");
               }
             });
+
+            let searchTimeout;
+            searchInput.addEventListener("input", function () {
+              const searchTerm = this.value.trim();
+
+              clearButton.classList.toggle("hidden", searchTerm === "");
+
+              clearTimeout(searchTimeout);
+              searchTimeout = setTimeout(() => {
+                reloadTable(searchTerm);
+              }, 300); // Tunggu 300ms setelah berhenti mengetik
+            });
+
+            if (clearButton) {
+              clearButton.addEventListener("click", function () {
+                searchInput.value = "";
+                clearButton.classList.add("hidden");
+                reloadTable("");
+              });
+            }
           });
         </script>
 
@@ -105,6 +159,11 @@
 
     </div>
   </div>
+
+  {% include 'modal/scanner_app/upload_emiten.html' %}
+  {% include 'modal/scanner_app/hapus_semua_emiten.html' %}
+
+  {% include 'modal/delete_emiten.html' %}
 
   {% comment %} {% include 'modal/accounts/struktur_organisasi/tambah/eselon1.html' %}
   {% include 'modal/accounts/struktur_organisasi/tambah/eselon2.html' %}

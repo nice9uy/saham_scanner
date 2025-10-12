@@ -2,6 +2,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path("", include("scanner_app.urls.dashboard" , namespace="authdashboard")),
-    # path("", include("accounts.urls.struktur_organisasi" , namespace="accounts")),
-    # path("", include("accounts.urls.anggota" , namespace="anggota")),
+    path("", include("scanner_app.urls.daftar_saham" , namespace="daftar_saham")),
 ]

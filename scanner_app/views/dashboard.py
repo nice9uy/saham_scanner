@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-import yfinance as yf
-import json
+# import yfinance as yf
+# import json
 from django.contrib import messages
 import pandas as pd
 from ..models import DaftarEmiten
@@ -77,6 +77,3 @@ def upload_emiten(request):
     return redirect("home:dashboard")
 
 
-def daftar_saham(request):
-
-    return render(request, "tabel/daftar_emiten.html")
