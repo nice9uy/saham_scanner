@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models.daftar_emiten import DaftarEmiten
 from .models.daftar_emiten import ListPolaSaham
 from .models.daftar_emiten import SettingPersen
+from .models.daftar_emiten import DataSemuaSaham
 
 
 class ListDaftarEmiten(admin.ModelAdmin):
@@ -13,11 +14,6 @@ class ListPolaSahan(admin.ModelAdmin):
         "id",
         "kode_emiten",
         "tanggal",
-        "close",
-        "open",
-        "high",
-        "low",
-        "volume",
         "value",
         "ch",
         "cl",
@@ -27,6 +23,18 @@ class ListPolaSahan(admin.ModelAdmin):
         "ma20",
         "ma50",
         "ma200",
+    )
+
+class ListDataSemuaSaham(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "kode_emiten",
+        "tanggal",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume",
     )
 
 
@@ -42,3 +50,5 @@ class ListSettingPersen(admin.ModelAdmin):
 admin.site.register(DaftarEmiten, ListDaftarEmiten)
 admin.site.register(ListPolaSaham, ListPolaSahan)
 admin.site.register(SettingPersen, ListSettingPersen)
+admin.site.register(DataSemuaSaham, ListDataSemuaSaham)
+
