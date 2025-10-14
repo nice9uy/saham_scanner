@@ -40,23 +40,11 @@ def ambil_data_saham(request):
 
             df[cols] = df[cols].round(2)
 
-            output_file = "data_saham.xlsx"
-
-            df.to_excel(output_file, sheet_name="DataSaham")
-
-            wb = load_workbook(output_file)
-            ws = wb.active
-            ws.delete_rows(2, 2)
-            ws["A1"] = "Date"
-            wb.save(output_file)
-
-            data_saham = pd.read_excel(output_file)
-
-            for index, row in data_saham.iterrows():
+            for index, row in df.iterrows():
                 try:
                     DataSemuaSaham.objects.create(
-                        kode_emiten=row["Ticker"],
-                        tanggal=pd.to_datetime(row["Date"]).date(),  # Konversi ke date
+                        kode_emiten=data_ticker,
+                        tanggal=index.date(),  
                         open=row["Open"],
                         high=row["High"],
                         low=row["Low"],
@@ -66,9 +54,7 @@ def ambil_data_saham(request):
                 except Exception as e:
                     print(f"Error, karena {e}")
                     continue
-            wb.close() 
-            if os.path.exists(output_file):
-                os.remove(output_file)
+        
             time.sleep(10)
 
     except Exception as e:
