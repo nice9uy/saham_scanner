@@ -85,7 +85,7 @@ def ambil_data_saham(request):
             for k in range(len(df) - 1):
                 close1 = df["Close"].iloc[k]
                 close = df["Close"].iloc[k + 1]
-                cc_hasil = (close1 - close) / close1 * 10
+                cc_hasil = (close1 - close) / close1 * 100
                 cc.append(cc_hasil)
 
             ###### MENCARI PP ########################
