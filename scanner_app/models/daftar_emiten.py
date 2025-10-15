@@ -36,10 +36,10 @@ class DataSemuaSaham(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     kode_emiten = models.CharField(max_length=7, null=True, blank=True)
     tanggal = models.DateField()
-    open = models.FloatField()
-    high = models.FloatField()
-    low = models.FloatField()
-    close = models.FloatField()
+    open = models.FloatField(null=True, blank=True)
+    high = models.FloatField(null=True, blank=True)
+    low = models.FloatField(null=True, blank=True)
+    close = models.FloatField(null=True, blank=True)
     volume = models.IntegerField()
 
     class Meta:
