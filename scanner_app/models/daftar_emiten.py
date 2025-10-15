@@ -17,14 +17,14 @@ class ListPolaSaham(models.Model):
     kode_emiten = models.CharField(max_length=7, null=True, blank=True)
     tanggal = models.DateField()
     value = models.IntegerField()
-    ch = models.FloatField()
-    cl = models.FloatField()
-    cc = models.FloatField()
-    pp = models.IntegerField()
-    ma5 = models.FloatField()
-    ma20 = models.FloatField()
-    ma50 = models.FloatField()
-    ma200 = models.FloatField()
+    ch = models.FloatField(null=True, blank=True)
+    cl = models.FloatField(null=True, blank=True)
+    cc = models.FloatField(null=True, blank=True)
+    pp = models.IntegerField(null=True, blank=True)
+    ma5 = models.FloatField(null=True, blank=True)
+    ma20 = models.FloatField(null=True, blank=True)
+    ma50 = models.FloatField(null=True, blank=True)
+    ma200 = models.FloatField(null=True, blank=True)
 
     class Meta:
         indexes = [
