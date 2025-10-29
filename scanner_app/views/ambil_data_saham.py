@@ -18,6 +18,8 @@ import pandas as pd
 # import logging
 # from django.db.models import Q
 import os
+import numpy as np
+
 
 
 @login_required(login_url="/accounts/login/")
@@ -88,27 +90,44 @@ def ambil_data_saham(request):
 
             tanggal = df.index.to_list()
 
-            ch_data = df["ch"].round(2).dropna().to_list()
-            cl_data = df["cl"].round(2).dropna().to_list()
-            cc_data = df["cc"].round(2).dropna().to_list()
+            ch_data = df["ch"].round(2)
+            cl_data = df["cl"].round(2)
+            cc_data = df["cc"].round(2)
 
-            pp_data = df["Pivot"].round(2).to_list()
+            pp_data = df["Pivot"].round(2)
 
-            ma5_data = df["ma5"].round(2).dropna().to_list()
-            ma20_data = df["ma20"].round(2).dropna().tolist()
-            ma50_data = df["ma50"].round(2).dropna().to_list()
-            ma200_data = df["ma50"].round(2).dropna().to_list()
+            ma5_data = df["ma5"].round(2)
+            ma20_data = df["ma20"].round(2)
+            ma50_data = df["ma50"].round(2)
+            ma200_data = df["ma50"].round(2)
 
-            
-            for data in range(len(tanggal)):
-                ma5_test = (ma5_data * 0.02 )[data]
-                close_test = close_data[data]
 
-                if ma5_test > close_test:
-                    print("Buy")
 
-                else:
-                    print("sell")
+            non_nan = ma5_data.dropna().sort_index(ascending=True) 
+            values = non_nan.values
+            all_dates = ma5_data.index  
+            new_values = np.full(len(ma5_data), np.nan)
+            new_values[:len(values)] = values  
+
+
+            cek_ma5 = pd.Series(new_values, index=all_dates, name=ma5_data.name).dropna()
+
+            print(cek_ma5)
+
+
+            # Konversi ke Series dengan index datetime
+       
+            # for data in range(len(tanggal)):
+            #     ma5_test = (ma5_data * 0.02 )[data]
+
+            #     print(ma5_test)
+            #     close_test = close_data[data]
+
+            #     if ma5_test > close_test:
+            #         print("Buy")
+
+            #     else:
+            #         print("sell")
             
 
         
