@@ -103,16 +103,16 @@ def ambil_data_saham(request):
 
 
 
-            non_nan = ma5_data.dropna().sort_index(ascending=True) 
+            non_nan = ma5_data.dropna().sort_index(ascending=False) 
             values = non_nan.values
             all_dates = ma5_data.index  
             new_values = np.full(len(ma5_data), np.nan)
             new_values[:len(values)] = values  
 
+    
+            ma5 = pd.DataFrame(new_values, index=all_dates).dropna().rename(columns={0: "MA5"})
 
-            cek_ma5 = pd.Series(new_values, index=all_dates, name=ma5_data.name).dropna()
-
-            print(cek_ma5)
+            print(ma5)
 
 
             # Konversi ke Series dengan index datetime
