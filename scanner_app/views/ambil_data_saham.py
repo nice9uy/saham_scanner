@@ -21,7 +21,6 @@ import os
 import numpy as np
 
 
-
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham(request):
     tickers = []
@@ -44,6 +43,7 @@ def ambil_data_saham(request):
         for data_ticker in tickers:
             data = yf.download(data_ticker, period="1mo", timeout=10)
             df = pd.DataFrame(data.sort_index(ascending=False))
+            print(f"DATA EMITEN {data_ticker} BERHASIL DI AMBIL...")
 
             df["Ticker"] = data_ticker
             cols = ["Close", "High", "Low", "Open"]
@@ -83,8 +83,8 @@ def ambil_data_saham(request):
 
             ###########################################################
 
-            close_list = df['Close'].values.tolist()
-            close_data = [item for sublist in close_list for item in sublist]
+            close_data = df["Close"]
+            # close_data = [item for sublist in close_list for item in sublist]
 
             values_data = df["Values"].to_list()
 
@@ -99,24 +99,71 @@ def ambil_data_saham(request):
             ma5_data = df["ma5"].round(2)
             ma20_data = df["ma20"].round(2)
             ma50_data = df["ma50"].round(2)
-            ma200_data = df["ma50"].round(2)
+            ma200_data = df["ma200"].round(2)
+
+            non_nan_ma5 = ma5_data.dropna().sort_index(ascending=False)
+            values_ma5 = non_nan_ma5.values
+            all_dates_ma5 = ma5_data.index
+            new_values_ma5 = np.full(len(ma5_data), np.nan)
+            new_values_ma5[: len(values_ma5)] = values_ma5
+
+            non_nan_ma20 = ma20_data.dropna().sort_index(ascending=False)
+            values_ma20 = non_nan_ma20.values
+            all_dates_ma20 = ma20_data.index
+            new_values_ma20 = np.full(len(ma20_data), np.nan)
+            new_values_ma20[: len(values_ma20)] = values_ma20
+
+            non_nan_ma50 = ma50_data.dropna().sort_index(ascending=False)
+            values_ma50 = non_nan_ma50.values
+            all_dates_ma50 = ma50_data.index
+            new_values_ma50 = np.full(len(ma50_data), np.nan)
+            new_values_ma50[: len(values_ma50)] = values_ma50
+
+            non_nan_ma200 = ma200_data.dropna().sort_index(ascending=False)
+            values_ma200 = non_nan_ma200.values
+            all_dates_ma200 = ma200_data.index
+            new_values_ma200 = np.full(len(ma200_data), np.nan)
+            new_values_ma200[: len(values_ma200)] = values_ma200
+
+            ma5_nilai = (
+                pd.DataFrame(new_values_ma5, index=all_dates_ma5)
+                .dropna()
+                .rename(columns={0: "ma5_nilai"})
+            )
+            ma20_nilai = (
+                pd.DataFrame(new_values_ma20, index=all_dates_ma20)
+                .dropna()
+                .rename(columns={0: "ma20_nilai"})
+            )
+            ma50_nilai = (
+                pd.DataFrame(new_values_ma50, index=all_dates_ma50)
+                .dropna()
+                .rename(columns={0: "ma50_nilai"})
+            )
+            ma200_nilai = (
+                pd.DataFrame(new_values_ma200, index=all_dates_ma200)
+                .dropna()
+                .rename(columns={0: "ma200_nilai"})
+            )
+
+
+            ma_combined = pd.concat(
+                [close_data, ma5_nilai, ma20_nilai], axis=1
+            ).sort_index(ascending=False)
+
+
+        
 
 
 
-            non_nan = ma5_data.dropna().sort_index(ascending=False) 
-            values = non_nan.values
-            all_dates = ma5_data.index  
-            new_values = np.full(len(ma5_data), np.nan)
-            new_values[:len(values)] = values  
+            # print(ma_combined)
 
-    
-            ma5 = pd.DataFrame(new_values, index=all_dates).dropna().rename(columns={0: "MA5"})
-
-            print(ma5)
-
-
+            # print(ma5)
+            # print(ma20)
+            # print(ma50)
+            # print(ma200)
             # Konversi ke Series dengan index datetime
-       
+
             # for data in range(len(tanggal)):
             #     ma5_test = (ma5_data * 0.02 )[data]
 
@@ -128,9 +175,6 @@ def ambil_data_saham(request):
 
             #     else:
             #         print("sell")
-            
-
-        
 
             time.sleep(100)
 
