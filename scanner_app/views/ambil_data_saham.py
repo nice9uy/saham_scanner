@@ -6,6 +6,8 @@ import yfinance as yf
 import time
 from django.db import transaction
 from openpyxl import load_workbook
+from datetime import datetime
+import itertools
 
 
 # import json
@@ -65,36 +67,26 @@ def ambil_data_saham(request):
             #         print(f"Error, karena {e}")
             #         continue
 
+            ####################################################################
             # 1. Kolom dasar
             df["Values"] = df["Close"] * df["Volume"]
             df["Pivot"] = (df["Close"] + df["High"] + df["Low"]) / 3
-
+            ###########################################################
+            close_list = df["Close"]
+            #########################################################
+          
+            ####################################################################
             # 2. CH, CL, CC → bandingkan hari ini dengan besok
             # Karena butuh hari berikutnya, hasilnya akan NaN di baris terakhir
             df["ch"] = (df["High"] - df["Close"].shift(-1)) / df["High"] * 100
             df["cl"] = (df["Low"] - df["Close"].shift(-1)) / df["Low"] * 100
             df["cc"] = (df["Close"] - df["Close"].shift(-1)) / df["Close"] * 100
-
+            #####################################################################
             # 3. Moving Average
             df["ma5"] = df["Close"].rolling(window=5).mean()
             df["ma20"] = df["Close"].rolling(window=20).mean()
             df["ma50"] = df["Close"].rolling(window=50).mean()
             df["ma200"] = df["Close"].rolling(window=200).mean()
-
-            ###########################################################
-
-            close_data = df["Close"]
-            # close_data = [item for sublist in close_list for item in sublist]
-
-            values_data = df["Values"].to_list()
-
-            tanggal = df.index.to_list()
-
-            ch_data = df["ch"].round(2)
-            cl_data = df["cl"].round(2)
-            cc_data = df["cc"].round(2)
-
-            pp_data = df["Pivot"].round(2)
 
             ma5_data = df["ma5"].round(2)
             ma20_data = df["ma20"].round(2)
@@ -146,35 +138,85 @@ def ambil_data_saham(request):
                 .rename(columns={0: "ma200_nilai"})
             )
 
+            #########################
+            list_close = [x[0] for x in close_list.values.tolist()]
+            ##########################
+            list_ma5 = [x[0] for x in ma5_nilai.values.tolist()]
+            ##########################
+            list_ma20 = [x[0] for x in ma20_nilai.values.tolist()]
+            ##########################
+            list_ma50 = [x[0] for x in ma50_nilai.values.tolist()]
+            #########################
+            list_ma200 = [x[0] for x in ma200_nilai.values.tolist()]
 
-            ma_combined = pd.concat(
-                [close_data, ma5_nilai, ma20_nilai], axis=1
-            ).sort_index(ascending=False)
+            ### CARI SIGNAL MA5 #######################################################
+            length_ma5 = len(close_list) - len(list_ma5)
+            close_untuk_ma5 = list_close[:-length_ma5]
+            cari_ma5 = pd.DataFrame({"Close": close_untuk_ma5, "MA5_data": list_ma5})
+            cari_ma5["MA5_signal"] = (
+                (cari_ma5["MA5_data"] - cari_ma5["Close"]) / 100
+            ).round(2)
+            cari_ma5 = cari_ma5.rename(columns={"MA5_signal": "MA5"})
+            ### CARI SIGNAL MA20 #####################################################
+            length_ma20 = len(close_list) - len(list_ma20)
+            close_untuk_ma20 = list_close[:-length_ma20]
+            cari_ma20 = pd.DataFrame(
+                {
+                    "Close": close_untuk_ma20,
+                    "MA20_data": list_ma20,
+                }
+            )
+            cari_ma20["MA20_signal"] = (
+                (cari_ma20["MA20_data"] - cari_ma20["Close"]) / 100
+            ).round(2)
+            cari_ma20 = cari_ma20.rename(columns={"MA20_signal": "MA20"})
+            ### CARI SIGNAL MA50 #####################################################
+            length_ma50 = len(close_list) - len(list_ma50)
+            close_untuk_ma50 = list_close[:-length_ma50]
+            cari_ma50 = pd.DataFrame(
+                {
+                    "Close": close_untuk_ma50,
+                    "MA50_data": list_ma50,
+                }
+            )
+            cari_ma50["MA50_signal"] = (
+                (cari_ma50["MA50_data"] - cari_ma50["Close"]) / 100
+            ).round(2)
+            cari_ma50 = cari_ma50.rename(columns={"MA50_signal": "MA50"})
+            ### CARI SIGNAL MA200 #####################################################
+            length_ma200 = len(close_list) - len(list_ma200)
+            close_untuk_ma200 = list_close[:-length_ma200]
+            cari_ma200 = pd.DataFrame(
+                {
+                    "Close": close_untuk_ma200,
+                    "MA200_data": list_ma200,
+                }
+            )
+            cari_ma200["MA200_signal"] = (
+                (cari_ma200["MA200_data"] - cari_ma200["Close"]) / 100
+            ).round(2)
+            cari_ma200 = cari_ma200.rename(columns={"MA200_signal": "MA200"})
+            ##########################################################################
+
+            values = df["Values"].values.tolist()
+            tanggal = df.index.tolist()
+            pp = df["Pivot"].round(2)
+            ch_data = df["ch"].round(2)
+            cl_data = df["cl"].round(2)
+            cc_data = df["cc"].round(2)
+
+            ################################################
+
+            df_x = pd.concat({
+                "MA5" : cari_ma5['MA5'],
+                "MA20" : cari_ma20['MA20']
+            })
 
 
-        
-
-
-
-            # print(ma_combined)
-
-            # print(ma5)
-            # print(ma20)
-            # print(ma50)
-            # print(ma200)
-            # Konversi ke Series dengan index datetime
-
-            # for data in range(len(tanggal)):
-            #     ma5_test = (ma5_data * 0.02 )[data]
-
-            #     print(ma5_test)
-            #     close_test = close_data[data]
-
-            #     if ma5_test > close_test:
-            #         print("Buy")
-
-            #     else:
-            #         print("sell")
+            print(df_x)
+            # print(cari_ma20["MA20"])
+            # print(cari_ma50["MA50"])
+            # print(cari_ma200["MA200"])
 
             time.sleep(100)
 
