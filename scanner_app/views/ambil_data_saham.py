@@ -74,7 +74,7 @@ def ambil_data_saham(request):
             ###########################################################
             close_list = df["Close"]
             #########################################################
-          
+
             ####################################################################
             # 2. CH, CL, CC → bandingkan hari ini dengan besok
             # Karena butuh hari berikutnya, hasilnya akan NaN di baris terakhir
@@ -197,29 +197,33 @@ def ambil_data_saham(request):
             ).round(2)
             cari_ma200 = cari_ma200.rename(columns={"MA200_signal": "MA200"})
             ##########################################################################
-
-            values = df["Values"].values.tolist()
-            tanggal = df.index.tolist()
-            pp = df["Pivot"].round(2)
-            ch_data = df["ch"].round(2)
-            cl_data = df["cl"].round(2)
-            cc_data = df["cc"].round(2)
+            values = pd.DataFrame(df["Values"].values, columns=["Values"])
+            tanggal = pd.DataFrame(df.index.values, columns=["Tanggal"])
+            ch_data = pd.DataFrame(df["ch"].round(2).values, columns=["ch"])
+            cl_data = pd.DataFrame(df["cl"].round(2).values, columns=["cl"])
+            cc_data = pd.DataFrame(df["cc"].round(2).values, columns=["cc"])
+            pp = pd.DataFrame(df["Pivot"].round(2).values, columns=["pp"])
 
             ################################################
 
-            df_x = pd.concat({
-                "MA5" : cari_ma5['MA5'],
-                "MA20" : cari_ma20['MA20'],
-                "MA50" : cari_ma50['MA50'],
-                "MA200" : cari_ma200['MA200']
-            },axis=1).fillna(0)
-
+            df_x = pd.concat(
+                {
+                    "TANGGAL": tanggal["Tanggal"],
+                    "CH": ch_data["ch"],
+                    "CL": cl_data["cl"],
+                    "CC": cc_data["cc"],
+                    "PP": pp["pp"],
+                    "MA5": cari_ma5["MA5"],
+                    "MA20": cari_ma20["MA20"],
+                    "MA50": cari_ma50["MA50"],
+                    "MA200": cari_ma200["MA200"],
+                    "Values": values["Values"],
+                },
+                axis=1,
+            ).fillna(0)
 
             print(df_x)
-            # print(cari_ma20["MA20"])
-            # print(cari_ma50["MA50"])
-            # print(cari_ma200["MA200"])
-
+        
             time.sleep(100)
 
     except Exception as e:
