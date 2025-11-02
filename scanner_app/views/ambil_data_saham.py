@@ -43,7 +43,7 @@ def ambil_data_saham(request):
 
     try:
         for data_ticker in tickers:
-            data = yf.download(data_ticker, period="1mo", timeout=10)
+            data = yf.download(data_ticker, period="1y", timeout=10)
             df = pd.DataFrame(data.sort_index(ascending=False))
             print(f"DATA EMITEN {data_ticker} BERHASIL DI AMBIL...")
 
@@ -209,8 +209,10 @@ def ambil_data_saham(request):
 
             df_x = pd.concat({
                 "MA5" : cari_ma5['MA5'],
-                "MA20" : cari_ma20['MA20']
-            })
+                "MA20" : cari_ma20['MA20'],
+                "MA50" : cari_ma50['MA50'],
+                "MA200" : cari_ma200['MA200']
+            },axis=1).fillna(0)
 
 
             print(df_x)
