@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "scanner_app",
     "compressor",
     "accounts",
-    "django_q",
+    "django_apscheduler",
 ]
 
 MIDDLEWARE = [
@@ -131,12 +131,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # =============== DJANGO-Q CONFIG ===============
 Q_CLUSTER = {
-    'name': 'StockCluster',
-    'workers': 2,                # jumlah worker
-    'timeout': 900,              # timeout task (15 menit)
-    'retry': 180,                # retry setelah 3 menit jika gagal
-    'queue_limit': 100,          # maks antrian
-    'bulk': 10,                  # jumlah task yang diambil sekaligus
-    'orm': 'default',            # simpan di database default
-    'catch_up': False,           # jangan kejar ketinggalan jadwal
+    "name": "StockCluster",
+    "workers": 2,  # jumlah worker
+    "timeout": 900,  # timeout task (15 menit)
+    "retry": 180,  # retry setelah 3 menit jika gagal
+    "queue_limit": 100,  # maks antrian
+    "bulk": 10,  # jumlah task yang diambil sekaligus
+    "orm": "default",  # simpan di database default
+    "catch_up": False,  # jangan kejar ketinggalan jadwal
 }

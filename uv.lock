@@ -3,6 +3,18 @@ revision = 2
 requires-python = ">=3.13"
 
 [[package]]
+name = "apscheduler"
+version = "3.11.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tzlocal" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d0/81/192db4f8471de5bc1f0d098783decffb1e6e69c4f8b4bc6711094691950b/apscheduler-3.11.1.tar.gz", hash = "sha256:0db77af6400c84d1747fe98a04b8b58f0080c77d11d338c4f507a9752880f221", size = 108044, upload-time = "2025-10-31T18:55:42.819Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/58/9f/d3c76f76c73fcc959d28e9def45b8b1cc3d7722660c5003b19c1022fd7f4/apscheduler-3.11.1-py3-none-any.whl", hash = "sha256:6162cb5683cb09923654fa9bdd3130c4be4bfda6ad8990971c9597ecd52965d2", size = 64278, upload-time = "2025-10-31T18:55:41.186Z" },
+]
+
+[[package]]
 name = "asgiref"
 version = "3.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -253,6 +265,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/61/a9/dcf95ff3fa0620b6818fc02276fbbb8926e7f286039b6d015e56e8b7af39/django-appconf-1.1.0.tar.gz", hash = "sha256:9fcead372f82a0f21ee189434e7ae9c007cbb29af1118c18251720f3d06243e4", size = 15986, upload-time = "2025-02-13T16:09:40.258Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/9e/f3a899991e4aaae4b69c1aa187ba4a32e34742475c91eb13010ee7fbe9db/django_appconf-1.1.0-py3-none-any.whl", hash = "sha256:7abd5a163ff57557f216e84d3ce9dac36c37ffce1ab9a044d3d53b7c943dd10f", size = 6389, upload-time = "2025-02-13T16:09:39.133Z" },
+]
+
+[[package]]
+name = "django-apscheduler"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "apscheduler" },
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/64/6b/873899c2da113187b74f0cccdf4c16660e07bfbbcae72621c4758e0958bf/django_apscheduler-0.7.0.tar.gz", hash = "sha256:30d61a2ba98615922fc2c9782f84bba342ec0c5ed63384d686d71ea90a1a4318", size = 473051, upload-time = "2024-09-28T04:54:09.98Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/19/c3d2dea21a6afdc93689b9f769ff3694cac810e4a09c24ab423dd1613e6c/django_apscheduler-0.7.0-py3-none-any.whl", hash = "sha256:869d489775420245c9455d55e35f663c856a33ebfc996d92938f786ffb8730ce", size = 24690, upload-time = "2024-09-28T04:54:06.884Z" },
 ]
 
 [[package]]
@@ -721,6 +746,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "backtesting" },
     { name = "django" },
+    { name = "django-apscheduler" },
     { name = "django-compressor" },
     { name = "djhtml" },
     { name = "openpyxl" },
@@ -733,6 +759,7 @@ dependencies = [
 requires-dist = [
     { name = "backtesting", specifier = ">=0.6.5" },
     { name = "django", specifier = ">=5.2.6" },
+    { name = "django-apscheduler", specifier = ">=0.7.0" },
     { name = "django-compressor", specifier = ">=4.5.1" },
     { name = "djhtml", specifier = ">=3.0.9" },
     { name = "openpyxl", specifier = ">=3.1.5" },
@@ -815,6 +842,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/95/32/1a225d6164441be760d75c2c42e2780dc0873fe382da3e98a2e1e48361e5/tzdata-2025.2.tar.gz", hash = "sha256:b60a638fcc0daffadf82fe0f57e53d06bdec2f36c4df66280ae79bce6bd6f2b9", size = 196380, upload-time = "2025-03-23T13:54:43.652Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5c/23/c7abc0ca0a1526a0774eca151daeb8de62ec457e77262b66b359c3c7679e/tzdata-2025.2-py2.py3-none-any.whl", hash = "sha256:1a403fada01ff9221ca8044d701868fa132215d84beb92242d9acd2147f667a8", size = 347839, upload-time = "2025-03-23T13:54:41.845Z" },
+]
+
+[[package]]
+name = "tzlocal"
+version = "5.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tzdata", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8b/2e/c14812d3d4d9cd1773c6be938f89e5735a1f11a9f184ac3639b93cef35d5/tzlocal-5.3.1.tar.gz", hash = "sha256:cceffc7edecefea1f595541dbd6e990cb1ea3d19bf01b2809f362a03dd7921fd", size = 30761, upload-time = "2025-03-05T21:17:41.549Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/14/e2a54fabd4f08cd7af1c07030603c3356b74da07f7cc056e600436edfa17/tzlocal-5.3.1-py3-none-any.whl", hash = "sha256:eb1a66c3ef5847adf7a834f1be0800581b683b5608e74f86ecbcef8ab91bb85d", size = 18026, upload-time = "2025-03-05T21:17:39.857Z" },
 ]
 
 [[package]]
