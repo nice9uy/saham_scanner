@@ -19,21 +19,13 @@ import pandas as pd
 # from django.http import JsonResponse
 # import logging
 # from django.db.models import Q
-import os
 import numpy as np
 
 
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham(request):
     tickers = []
-    ch = []
-    cl = []
-    cc = []
-    ma5 = []
-    ma20 = []
-    ma50 = []
-    ma200 = []
-
+ 
     all_tickers = DaftarEmiten.objects.values_list("kode_emiten", flat=True).iterator(
         chunk_size=2000
     )
@@ -52,20 +44,20 @@ def ambil_data_saham(request):
 
             df[cols] = df[cols].round(2)
 
-            # for index, row in df.iterrows():
-            #     try:
-            #         DataSemuaSaham.objects.create(
-            #             kode_emiten=data_ticker,
-            #             tanggal=index.date(),
-            #             open=row["Open"],
-            #             high=row["High"],
-            #             low=row["Low"],
-            #             close=row["Close"],
-            #             volume=row["Volume"],
-            #         )
-            #     except Exception as e:
-            #         print(f"Error, karena {e}")
-            #         continue
+            for index, row in df.iterrows():
+                try:
+                    DataSemuaSaham.objects.create(
+                        kode_emiten=data_ticker,
+                        tanggal=index.date(),
+                        open=row["Open"],
+                        high=row["High"],
+                        low=row["Low"],
+                        close=row["Close"],
+                        volume=row["Volume"],
+                    )
+                except Exception as e:
+                    print(f"Error, karena {e}")
+                    continue
 
             ####################################################################
             # 1. Kolom dasar
@@ -206,9 +198,10 @@ def ambil_data_saham(request):
 
             ################################################
 
-            df_x = pd.concat(
+            gabungan = pd.concat(
                 {
                     "TANGGAL": tanggal["Tanggal"],
+                    "Values": values["Values"],
                     "CH": ch_data["ch"],
                     "CL": cl_data["cl"],
                     "CC": cc_data["cc"],
@@ -217,13 +210,29 @@ def ambil_data_saham(request):
                     "MA20": cari_ma20["MA20"],
                     "MA50": cari_ma50["MA50"],
                     "MA200": cari_ma200["MA200"],
-                    "Values": values["Values"],
                 },
                 axis=1,
             ).fillna(0)
 
-            print(df_x)
-        
+            for _, row in gabungan.iterrows():
+                try:
+                    ListPolaSaham.objects.create(
+                        kode_emiten=data_ticker,
+                        tanggal=row["TANGGAL"],
+                        value=row["Values"],
+                        ch=row["CH"],
+                        cl=row["CL"],
+                        cc=row["CC"],
+                        pp=row["PP"],
+                        ma5=row["MA5"],
+                        ma20=row["MA20"],
+                        ma50=row["MA50"],
+                        ma200=row["MA200"],
+                    )
+                except Exception as e:
+                    print(f"Error, karena {e}")
+                    continue
+
             time.sleep(100)
 
     except Exception as e:
