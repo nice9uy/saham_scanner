@@ -24,20 +24,37 @@ import numpy as np
 
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham(request):
-    tickers = []
+    context = {"page_title": "AMBIL DATA SAHAM"}
 
+    return render(request, "ambil_data_saham.html", context)
+
+
+@login_required(login_url="/accounts/login/")
+def ambil_data_saham_stop(request):
+    if request.method == "POST":
+        stop_semua_saham = DataSemuaSaham.objects.all()
+        stop_semua_saham.delete()
+
+        stop_list_pola = ListPolaSaham.objects.all()
+        stop_list_pola.delete()
+
+    return redirect("ambil_data_saham:ambil_data_saham")
+
+
+@login_required(login_url="/accounts/login/")
+def ambil_data_saham_start(request):
+    counter = 0
+    
     all_tickers = DaftarEmiten.objects.values_list("kode_emiten", flat=True).iterator(
         chunk_size=2000
     )
 
-    for ticker in all_tickers:
-        tickers.append(ticker)
-
     try:
-        for data_ticker in tickers:
+        for data_ticker in all_tickers:
             data = yf.download(data_ticker, period="1y", timeout=10)
             df = pd.DataFrame(data.sort_index(ascending=False))
             print(f"DATA EMITEN {data_ticker} BERHASIL DI AMBIL...")
+            counter += 1
 
             df["Ticker"] = data_ticker
             cols = ["Close", "High", "Low", "Open"]
@@ -233,11 +250,11 @@ def ambil_data_saham(request):
                     print(f"Error, karena {e}")
                     continue
 
-            time.sleep(100)
+            time.sleep(10)
 
     except Exception as e:
         print(f"gagal dikarenakan {e}")
 
-    context = {"page_title": "AMBIL DATA SAHAM"}
+    print(f"DATA SAHAM BERHASIL ADA : {counter} ")
 
-    return render(request, "ambil_data_saham.html", context)
+    return redirect("ambil_data_saham:ambil_data_saham_start")
