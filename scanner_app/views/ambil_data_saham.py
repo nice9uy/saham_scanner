@@ -25,7 +25,7 @@ import numpy as np
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham(request):
     tickers = []
- 
+
     all_tickers = DaftarEmiten.objects.values_list("kode_emiten", flat=True).iterator(
         chunk_size=2000
     )
@@ -44,7 +44,7 @@ def ambil_data_saham(request):
 
             df[cols] = df[cols].round(2)
 
-            for index, row in df.iterrows():
+            for index, row in df.iloc[::-1].iterrows():
                 try:
                     DataSemuaSaham.objects.create(
                         kode_emiten=data_ticker,
@@ -214,7 +214,7 @@ def ambil_data_saham(request):
                 axis=1,
             ).fillna(0)
 
-            for _, row in gabungan.iterrows():
+            for _, row in gabungan.iloc[::-1].iterrows():
                 try:
                     ListPolaSaham.objects.create(
                         kode_emiten=data_ticker,
