@@ -8,6 +8,7 @@ from django.db import transaction
 from openpyxl import load_workbook
 from datetime import datetime
 import itertools
+from datetime import date
 
 
 # import json
@@ -24,6 +25,48 @@ import numpy as np
 
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham(request):
+    all_tickers = list(DaftarEmiten.objects.values_list("kode_emiten", flat=True))
+
+
+
+    data = pd.DataFrame()
+    for _ in range(3):
+        data = yf.download(all_tickers, period="1d", timeout=10, threads=True)
+        if not data.empty and not data.isna().all().all():
+            break
+        time.sleep(10)
+
+    # Jika ada data, proses hanya ticker yang punya nilai (abaikan yang kosong)
+    if not data.empty:
+        # Filter hanya kolom ticker yang memiliki setidaknya satu nilai non-NaN
+        valid_tickers = []
+        for ticker in data.columns.get_level_values(1).unique():
+            ticker_data = data.xs(ticker, axis=1, level=1)
+            if not ticker_data.isna().all().all():
+                valid_tickers.append(ticker)
+
+        # Ambil hanya data dari ticker yang valid
+        filtered_data = data.loc[:, (slice(None), valid_tickers)]
+        df_data = pd.DataFrame(filtered_data.sort_index(ascending=False).stack(level=1).reset_index())
+    else:
+        df_data = pd.DataFrame()
+        valid_tickers = []
+
+
+
+
+    # print(df_data)
+
+
+
+
+    time.sleep(10000)
+
+    # output_file = "saham_hari_ini.xlsx"
+    # df_data.to_excel(output_file, index=True, engine="openpyxl")
+
+
+
     context = {"page_title": "AMBIL DATA SAHAM"}
 
     return render(request, "ambil_data_saham.html", context)
@@ -44,7 +87,8 @@ def ambil_data_saham_stop(request):
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham_start(request):
     counter = 0
-    
+    sekarang = datetime.now()
+    jam = sekarang.strftime("%H:%M:%S")
     all_tickers = DaftarEmiten.objects.values_list("kode_emiten", flat=True).iterator(
         chunk_size=2000
     )
@@ -53,6 +97,7 @@ def ambil_data_saham_start(request):
         for data_ticker in all_tickers:
             data = yf.download(data_ticker, period="1y", timeout=10)
             df = pd.DataFrame(data.sort_index(ascending=False))
+
             print(f"DATA EMITEN {data_ticker} BERHASIL DI AMBIL...")
             counter += 1
 
@@ -250,11 +295,20 @@ def ambil_data_saham_start(request):
                     print(f"Error, karena {e}")
                     continue
 
+            sekarang = datetime.now()
+            jam_akhir = sekarang.strftime("%H:%M:%S")
+
+            print("#" * 40)
+            print(f"Mulai               : {jam}")
+            print(f"Saham yang berhasil : {counter}")
+            print(f"Jam Berakhir        : {jam_akhir}")
+            print("#" * 40)
             time.sleep(10)
 
     except Exception as e:
         print(f"gagal dikarenakan {e}")
-
+    print("#" * 50)
     print(f"DATA SAHAM BERHASIL ADA : {counter} ")
+    print("#" * 50)
 
     return redirect("ambil_data_saham:ambil_data_saham_start")

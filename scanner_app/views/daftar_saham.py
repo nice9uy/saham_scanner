@@ -18,6 +18,11 @@ def daftar_saham(request):
 
     emiten = DaftarEmiten.objects.all()
 
+    # data = yf.download("AALI.JK", period="1y", timeout=10)
+    # # df = pd.DataFrame(data.sort_index(ascending=True))
+
+    # print(data)
+
 
     context = {
         "page_title": "DAFTAR SAHAM",

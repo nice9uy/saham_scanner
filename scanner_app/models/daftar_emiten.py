@@ -28,13 +28,13 @@ class ListPolaSaham(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["kode_emiten", "tanggal"]),
+            models.Index(fields=["id", "kode_emiten" , "tanggal" ]),
         ]
 
 
 class DataSemuaSaham(models.Model):
-    id = models.AutoField(primary_key=True, unique=True)
-    kode_emiten = models.CharField(max_length=7, null=True, blank=True)
+    id = models.AutoField(primary_key=True, unique=True, db_index=True)
+    kode_emiten = models.CharField(max_length=7, null=True, blank=True, db_index=True)
     tanggal = models.DateField()
     open = models.FloatField(null=True, blank=True)
     high = models.FloatField(null=True, blank=True)
@@ -44,7 +44,7 @@ class DataSemuaSaham(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["kode_emiten", "tanggal"]),
+            models.Index(fields=["id", "kode_emiten"]),
         ]
 
 
