@@ -26,46 +26,111 @@ import numpy as np
 @login_required(login_url="/accounts/login/")
 def ambil_data_saham(request):
     all_tickers = list(DaftarEmiten.objects.values_list("kode_emiten", flat=True))
+    total_ticker_diminta = len(all_tickers)
 
-
-
-    data = pd.DataFrame()
-    for _ in range(3):
-        data = yf.download(all_tickers, period="1d", timeout=10, threads=True)
-        if not data.empty and not data.isna().all().all():
-            break
-        time.sleep(10)
-
-    # Jika ada data, proses hanya ticker yang punya nilai (abaikan yang kosong)
-    if not data.empty:
-        # Filter hanya kolom ticker yang memiliki setidaknya satu nilai non-NaN
-        valid_tickers = []
-        for ticker in data.columns.get_level_values(1).unique():
-            ticker_data = data.xs(ticker, axis=1, level=1)
-            if not ticker_data.isna().all().all():
-                valid_tickers.append(ticker)
-
-        # Ambil hanya data dari ticker yang valid
-        filtered_data = data.loc[:, (slice(None), valid_tickers)]
-        df_data = pd.DataFrame(filtered_data.sort_index(ascending=False).stack(level=1).reset_index())
-    else:
+    if total_ticker_diminta == 0:
         df_data = pd.DataFrame()
-        valid_tickers = []
+        ticker_gagal = 0
+    else:
+        n_batches = 5
+        batch_size = (total_ticker_diminta + n_batches - 1) // n_batches
+        ticker_batches = [
+            all_tickers[i : i + batch_size]
+            for i in range(0, total_ticker_diminta, batch_size)
+        ]
 
+        batch_results = []
 
+        for i, batch in enumerate(ticker_batches):
+            try:
+                batch_data = yf.download(batch, period="1d", timeout=10, threads=True)
+                if not batch_data.empty:
+                    if "Adj Close" in batch_data.columns.get_level_values(0):
+                        batch_data = batch_data.drop(columns="Adj Close")
+                    batch_df = (
+                        batch_data.sort_index(ascending=False)
+                        .stack(level=1, future_stack=False)
+                        .reset_index()
+                    )
+                    batch_results.append(batch_df)
+            except Exception as e:
+                print(f"Error in batch {i + 1}: {e}")
+            time.sleep(1)
 
+        df_data = (
+            pd.concat(batch_results, ignore_index=True)
+            if batch_results
+            else pd.DataFrame()
+        )
+
+        for index, row in df_data.iterrows():
+            try:
+                DataSemuaSaham.objects.create(
+                    kode_emiten=row["Ticker"],
+                    tanggal=row["Date"],
+                    open=row["Open"],
+                    high=row["High"],
+                    low=row["Low"],
+                    close=row["Close"],
+                    volume=row["Volume"],
+                )
+            except Exception as e:
+                print(f"Error, karena {e}")
+                continue
+
+        # Hitung ticker yang berhasil (unik)
+        if not df_data.empty and "Ticker" in df_data.columns:
+            ticker_berhasil_list = df_data["Ticker"].dropna().unique().tolist()
+            ticker_berhasil = len(ticker_berhasil_list)
+        else:
+            ticker_berhasil_list = []
+            ticker_berhasil = 0
+
+        ticker_gagal = total_ticker_diminta - ticker_berhasil
+
+    for data_ticker in ticker_berhasil_list:
+        df_data_saham = DataSemuaSaham.objects.filter(kode_emiten=data_ticker).values(
+            "kode_emiten", "tanggal", "open", "high", "low", "close", "volume"
+        )
+        print(
+            pd.DataFrame(df_data_saham)
+            .sort_index(ascending=False)
+            .reset_index()
+            .drop(columns="index")
+        )
+        break
+
+    print("#" * 30)
+    print(f"Total Ticker     : {total_ticker_diminta}")
+    print(f"Ticker berhasil  : {ticker_berhasil}")
+    print(f"Ticker gagal     : {ticker_gagal}")
+    print("#" * 30)
 
     # print(df_data)
+    # print(ticker_berhasil_list)
 
+    # ###############################################################
 
+    #     time.sleep(300000)
 
+    # cols = ["Close", "High", "Low", "Open"]
 
-    time.sleep(10000)
+    # df[cols] = df[cols].round(2)
 
-    # output_file = "saham_hari_ini.xlsx"
-    # df_data.to_excel(output_file, index=True, engine="openpyxl")
-
-
+    # for index, row in df.iloc[::-1].iterrows():
+    #     try:
+    #         DataSemuaSaham.objects.create(
+    #                     kode_emiten=data_ticker,
+    #                     tanggal=index.date(),
+    #                     open=row["Open"],
+    #                     high=row["High"],
+    #                     low=row["Low"],
+    #                     close=row["Close"],
+    #                     volume=row["Volume"],
+    #                 )
+    #     except Exception as e:
+    #         print(f"Error, karena {e}")
+    #         continue
 
     context = {"page_title": "AMBIL DATA SAHAM"}
 
