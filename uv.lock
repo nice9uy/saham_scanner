@@ -325,6 +325,18 @@ wheels = [
 ]
 
 [[package]]
+name = "holidays"
+version = "0.84"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "python-dateutil" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2b/91/7301d71a49cfbb499c704615565199180676131da1a56896365bfff6df52/holidays-0.84.tar.gz", hash = "sha256:d604490717c2315e0800269d03c86bf8275e132e4bd140f19d62eb6ccddb5ddc", size = 797583, upload-time = "2025-11-03T20:34:15.139Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/99/a3/26f03449945a1cae7fbd3de10b88d9c139e20753537e4d527304b1e51dea/holidays-0.84-py3-none-any.whl", hash = "sha256:bca376e3becb36ea8e370d08268520934d8a9bd897ae5007ba51b3d7b4e34988", size = 1310662, upload-time = "2025-11-03T20:34:13.284Z" },
+]
+
+[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -749,6 +761,7 @@ dependencies = [
     { name = "django-apscheduler" },
     { name = "django-compressor" },
     { name = "djhtml" },
+    { name = "holidays" },
     { name = "openpyxl" },
     { name = "pandas-ta" },
     { name = "ruff" },
@@ -762,6 +775,7 @@ requires-dist = [
     { name = "django-apscheduler", specifier = ">=0.7.0" },
     { name = "django-compressor", specifier = ">=4.5.1" },
     { name = "djhtml", specifier = ">=3.0.9" },
+    { name = "holidays", specifier = ">=0.84" },
     { name = "openpyxl", specifier = ">=3.1.5" },
     { name = "pandas-ta", specifier = ">=0.4.71b0" },
     { name = "ruff", specifier = ">=0.13.1" },
