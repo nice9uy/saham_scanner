@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-# import yfinance as yf
+import yfinance as yf
 # import json
 from django.contrib import messages
 import pandas as pd
@@ -12,6 +12,22 @@ def dashboard(request):
     total_emiten = DaftarEmiten.objects.all().count()
 
 
+
+
+    # df = yf.download("BBCA.JK", start="2023-01-01")
+    # df = df.sort_index(ascending=False)
+
+
+# Pastikan index datetime dan kolom lowercase (opsional tapi disarankan)
+    # df.columns = df.columns.str.lower()
+
+    # # Hitung MACD
+    # df.ta.macd(close='close', append=True)
+
+    # print(df)
+
+    # # Tampilkan kolom MACD
+    # print(df[['close', 'MACD_12_26_9', 'MACDh_12_26_9', 'MACDs_12_26_9']].tail())
 
 
     # print(json.dumps(xdata, indent=4, ensure_ascii=False))
