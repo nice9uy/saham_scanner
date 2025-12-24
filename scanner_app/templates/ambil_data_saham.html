@@ -19,33 +19,149 @@
         <div>
           <button  type="button" data-modal-target="start_button" data-modal-toggle="start_button"  class="px-4 py-2 text-XL font-extrabold text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">START</button>
         </div>
-         <div>
+        <div>
           <button type="button" data-modal-target="stop_button" data-modal-toggle="stop_button"  class="px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">HAPUS SEMUA</button>
-        </div> 
+        </div>
       </div>
-     
+
 
     </main>
-  </div>
 
-  <div class="p-4 pt-1">
+<!-- Ganti seluruh bagian progress bar dengan ini -->
+    <div class="w-full bg-gray-700 rounded-full h-8 mt-4 relative">
+      <div
+        id="progressFill"
+        class="bg-blue-600 h-full rounded-full"
+        style="width: 0%; transition: width 0.3s ease;"
+      >
+        <span id="progressText" class="text-white text-2xl font-bold absolute inset-0 flex items-center justify-center drop-shadow-md">
+          0%
+        </span>
+      </div>
 
-  </div>
+    </div>
+    <div class="text-center p-3 text-white font-bold" id="message">
+      Klik tombol untuk mulai.
+    </div>
 
-  <div class="">
+    <div class="p-4 pt-1">
+
+    </div>
+
+    <div class="">
     {% comment %} {% include 'copyright.html' %} {% endcomment %}
     {% comment %} {% else %}
     {% endif %} {% endcomment %}
-  </div>
+    </div>
 
 
 
 
-  {% include 'modal/scanner_app/upload_emiten.html' %}
+    {% include 'modal/scanner_app/upload_emiten.html' %}
 
-  {% include 'modal/scanner_app/hapus_semua_emiten.html' %}
-  {% include 'modal/start.html' %}
-  {% include 'modal/stop.html' %}
+    {% include 'modal/scanner_app/hapus_semua_emiten.html' %}
+    {% include 'modal/start.html' %}
+    {% include 'modal/stop.html' %}
+
+  {% comment %} <script>
+    document.getElementById("startBtn").onclick = async () => {
+      const btn = document.getElementById("startBtn");
+      btn.disabled = true;
+     // btn.textContent = "Memproses...";
+
+      const res = await fetch("/scanner/ambil_data_saham/start/", {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}" }
+      });
+      const { task_id } = await res.json();
+
+      const ws = new WebSocket(`ws://127.0.0.1:8000/ws/progress/${task_id}/`);
+
+      console.log(ws)
+      ws.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        document.getElementById("progressFill").style.width = data.progress + "%";
+        document.getElementById("message").innerText = data.message;
+
+        console.log(data.progress);
+
+        if (data.progress >= 100) {
+          btn.disabled = false;
+          btn.textContent = "Selesai!";
+        }
+      };
+    };
+  </script>   {% endcomment %}
+
+
+    <script>
+  // Pilih tombol berdasarkan data-modal-target
+      const startBtn = document.getElementById("startBtn");
+
+      if (startBtn) {
+        startBtn.addEventListener('click', async () => {
+          startBtn.disabled = true;
+          startBtn.textContent = "Memproses...";
+
+          try {
+        // Kirim permintaan ke Django
+            const res = await fetch("/scanner/ambil_data_saham/start/", {
+              method: "POST",
+              headers: { "X-CSRFToken": "{{ csrf_token }}" }
+            });
+            const { task_id } = await res.json();
+
+        // WebSocket URL dinamis (agar jalan di production juga)
+            const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+            const ws = new WebSocket(`${protocol}${window.location.host}/ws/progress/${task_id}/`);
+
+            ws.onmessage = (e) => {
+              const data = JSON.parse(e.data);
+
+          // Update progress bar
+              const progressFill = document.getElementById("progressFill");
+              if (progressFill) {
+                progressFill.style.width = data.progress + "%";
+              }
+
+            // ✅ UPDATE TEKS PERSENTASE
+              const progressText = document.getElementById("progressText");
+              if (progressText) {
+                progressText.textContent = data.progress + "%";
+              }
+
+          // Update pesan
+              const messageEl = document.getElementById("message");
+              if (messageEl) {
+                messageEl.innerText = data.message;
+              }
+
+          // Selesai?
+              if (data.progress >= 100) {
+                startBtn.disabled = false;
+                startBtn.textContent = "Selesai!";
+              }
+            };
+
+            ws.onerror = (error) => {
+              console.error("WebSocket error:", error);
+              alert("Koneksi real-time gagal!");
+              startBtn.disabled = false;
+              startBtn.textContent = "Coba Lagi";
+            };
+
+          } catch (error) {
+            console.error("Fetch error:", error);
+            alert("Gagal memulai: " + error.message);
+            startBtn.disabled = false;
+            startBtn.textContent = "Coba Lagi";
+          }
+        });
+      } else {
+        console.error("❌ Tombol START tidak ditemukan! Periksa data-modal-target.");
+      }
+    </script>
+
 
 
 {% endblock %}

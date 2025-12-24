@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,6 +42,8 @@ INSTALLED_APPS = [
     "compressor",
     "accounts",
     "django_apscheduler",
+    "channels",
+    "cacheops",
 ]
 
 MIDDLEWARE = [
@@ -53,7 +56,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "saham_sanner.urls"
 
 TEMPLATES = [
     {
@@ -70,8 +72,42 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "saham_sanner.wsgi.application"
+# WSGI_APPLICATION = "saham_sanner.wsgi.application"
 
+ROOT_URLCONF = "saham_sanner.urls"
+ASGI_APPLICATION = "saham_sanner.asgi.application"
+
+
+# Redis & Celery
+CELERY_BROKER_URL = "redis://127.0.0.1:6380/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6380/0"
+
+# Channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("127.0.0.1", 6380)]},
+    }
+}
+
+CACHEOPS_REDIS = {
+    'host': 'localhost', # redis-server is on same machine
+    'port': 6380,        # default redis port
+    'db': 1,             # SELECT non-default redis database
+                         # using separate redis db or redis instance
+                         # is highly recommended
+
+    'socket_timeout': 3,   # connection timeout in seconds, optional
+    # 'password': '...',     # optional
+    # 'unix_socket_path': '' # replaces host and port
+}
+
+# Alternatively the redis connection can be defined using a URL:
+CACHEOPS_REDIS = "redis://localhost:6380/1"
+# or
+CACHEOPS_REDIS = "unix://path/to/socket?db=1"
+# or with password (note a colon)
+CACHEOPS_REDIS = "redis://:password@localhost:6380/1"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -130,6 +166,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # =============== DJANGO-Q CONFIG ===============
+
 Q_CLUSTER = {
     "name": "StockCluster",
     "workers": 2,  # jumlah worker
