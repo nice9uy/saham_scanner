@@ -12,75 +12,6 @@
 
     <main class="p-4 pt-20 ">
 
-      {% comment %} <div class=" mx-auto">
-        <div class="flex flex-wrap justify-between gap-4 w-full">
-
-
-          <div class="text-white border-gray-400 rounded-lg h-32">
-            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
-              <div class="px-4 py-5 text-center">
-                <dl>
-                  <dt class="text-2xl font-bold text-white truncate">TOTAL EMITEN</dt>
-                  <dd class="mt-1 text-2xl font-semibold text-yellow-300">{{ total_emiten }} </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div class="text-white border-gray-400 rounded-lg h-32">
-            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
-              <div class="px-4 py-5 text-center">
-                <dl>
-                  <dt class="text-xl font-bold text-white truncate">EMITEN NAIK </dt>
-                  <dt class="text-xl font-bold text-white truncate"> </dt>
-                  <dd class="mt-1 text-2xl font-semibold text-yellow-300">Rp. </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-         <!-- Kotak 2 -->
-          <div class="text-white border-gray-400 rounded-lg h-32">
-            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
-              <div class="px-4 py-5 text-center">
-                <dl>
-                  <dt class="text-xl font-bold text-white truncate">EMITEN TURUN</dt>
-                  <dt class="text-xl font-bold text-white truncate"></dt>
-                  <dd class="mt-1 text-2xl font-semibold text-yellow-300"></dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-           <!-- Kotak 3 -->
-          <div class="text-white border-gray-400 rounded-lg h-32">
-            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
-              <div class="px-4 py-5 text-center">
-                <dl>
-                  <dt class="text-xl font-bold text-white truncate">EMITEN AKAN NAIK</dt>
-                  <dt class="text-xl font-bold text-white truncate"> </dt>
-                  <dd class="mt-1 text-2xl font-semibold text-yellow-300"> </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-          <div class="text-white border-gray-400 rounded-lg h-32">
-            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
-              <div class="px-4 py-5 text-center">
-                <dl>
-                  <dt class="text-xl font-bold text-white truncate">EMITEN AKAN NAIK</dt>
-                  <dt class="text-xl font-bold text-white truncate"> </dt>
-                  <dd class="mt-1 text-2xl font-semibold text-yellow-300"> </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-
-           <!-- Kotak 4 -->
-        </div>
-      </div> {% endcomment %}
-
-
       <div class="mx-auto w-full px-4">
         <div class="flex flex-wrap justify-between gap-4 w-full">
 
@@ -149,13 +80,116 @@
               </div>
             </div>
           </div>
-
-
+          <div class="text-white border-gray-400 rounded-lg h-32 w-full sm:w-auto flex-1 min-w-[180px]">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-gray-600 h-full">
+              <div class="px-4 py-5 text-center">
+                <dl>
+                  <dt class="text-xl font-bold text-white truncate">NETRAL</dt>
+                  <dd class="mt-1 text-2xl font-semibold text-gray-300">89</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
   </main>
+
+  <div class="bg-white w-full" id="table_semua_saham"></div>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var table = new Tabulator("#table_semua_saham", {
+        height: "100%",
+       layout: "fitColumns",
+        responsiveLayout: "collapse",
+        ajaxURL: "",
+        ajaxParams: {
+          page: 1,
+          size: 15,
+        },
+        ajaxConfig: "GET",
+        pagination: true,
+        paginationMode: "remote", // fetch page dari server
+        paginationSize: 15,
+        paginationSizeSelector: [15],
+        paginationDataSent: {
+          "page": "page",   // Kirim ?page=2
+          "size": "size",   // Kirim ?size=15
+        },
+        paginationDataReceived: {
+          "last_page": "last_page",  // Harus match dengan JSON response
+          "data": "data"
+        },
+        placeholder: "Data tidak tersedia",
+        columnHeaderVertAlign:"bottom",
+        columns:[
+          {title:"Name", field:"name"},
+          {//create column group
+            title:"INFO EMITEN",
+            columns:[
+              {title:"LIKUID", field:"progress", hozAlign:"right", sorter:"number" ,headerHozAlign: "center", headerVertical:true },
+              {title:"FUNDAMENTAL", field:"rating", hozAlign:"center" , headerHozAlign: "center" , headerVertical:true},
+            ],
+          },
+          {//create column group
+            title:"DATA TEKNIKAL",  
+            columns:[
+              {title:"CLOSE", field:"gender" , headerHozAlign: "center" , headerVertical:true },
+              {title:"RSI", field:"col" , headerHozAlign: "center", headerVertical:true },
+              {title:"STOCH", field:"dob", hozAlign:"center", headerHozAlign: "center" , headerVertical:true },
+               {title:"MACD Hist", field:"col" , headerHozAlign: "center" , headerVertical:true },
+              {title:"Volatilitas", field:"dob", hozAlign:"center", headerHozAlign: "center" , headerVertical:true},
+            ],
+          },
+          {title:"CANDLESTICK", field:"name" , headerVertical:true },
+                    {title:"DETEKSI BANDAR", field:"name" , headerVertical:true },
+
+                         {//create column group
+            title:"REFERENSI HARGA",  
+            columns:[
+              {title:"HARGA SAAT INI", field:"gender" , headerHozAlign: "center" ,headerVertical:true },
+              {title:"STOP LOST", field:"col" , headerHozAlign: "center"  , headerVertical:true },
+              {title:"PROFIT", field:"dob", hozAlign:"center", headerHozAlign: "center" , headerVertical:true },
+               {title:"Ratio Risk : Reward", field:"col" , headerHozAlign: "center", headerVertical:true },
+            ],
+          },
+
+           {//create column group
+            title:"BACKTEST",  
+            columns:[
+              {title:"Total Trades", field:"gender" , headerHozAlign: "center" , headerVertical:true },
+              {title:"Win Rate", field:"col" , headerHozAlign: "center", headerVertical:true },
+              {title:"Profit Factor", field:"dob", hozAlign:"center", headerHozAlign: "center" , headerVertical:true },
+               {title:"Total Return", field:"col" , headerHozAlign: "center" , headerVertical:true },
+              {title:"Avg Risk:Reward", field:"dob", hozAlign:"center", headerHozAlign: "center" , headerVertical:true},
+            ],
+          },
+
+        ],
+
+        ajaxError: function(xhr, textStatus, errorThrown) {
+          console.error("Ajax Error:", textStatus, errorThrown);
+        }
+      });
+    });
+
+    function close_admin_satker() {
+      const modal = document.getElementById('modal_hapus_admin_satker');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'modal_hapus_admin_satker') {
+        close_admin_satker();
+      }
+    });
+
+  </script>
+  </div>
+
+
   </div>
 
   <div class="p-4 pt-1">

@@ -976,9 +976,6 @@
   .-end-2 {
     inset-inline-end: calc(var(--spacing) * -2);
   }
-  .end-2 {
-    inset-inline-end: calc(var(--spacing) * 2);
-  }
   .end-2\.5 {
     inset-inline-end: calc(var(--spacing) * 2.5);
   }
@@ -987,9 +984,6 @@
   }
   .top-0 {
     top: calc(var(--spacing) * 0);
-  }
-  .top-2 {
-    top: calc(var(--spacing) * 2);
   }
   .top-2\.5 {
     top: calc(var(--spacing) * 2.5);
@@ -1649,9 +1643,6 @@
       text-align: center;
     }
   }
-  .w-1 {
-    width: calc(var(--spacing) * 1);
-  }
   .w-1\/2 {
     width: calc(1/2 * 100%);
   }
@@ -1776,9 +1767,6 @@
   }
   .shrink-0 {
     flex-shrink: 0;
-  }
-  .border-collapse {
-    border-collapse: collapse;
   }
   .-translate-x-full {
     --tw-translate-x: -100%;
@@ -2227,6 +2215,9 @@
       background-color: color-mix(in oklab, var(--color-gray-900) 50%, transparent);
     }
   }
+  .bg-green-600 {
+    background-color: var(--color-green-600);
+  }
   .bg-red-500 {
     background-color: var(--color-red-500);
   }
@@ -2298,18 +2289,6 @@
     }
     .dark .apexcharts-canvas .apexcharts-datalabels-group .apexcharts-text& {
       fill: white !important;
-    }
-  }
-  .apexcharts-gridline {
-    stroke: var(--color-gray-200) !important;
-    .dark & {
-      stroke: var(--color-gray-700) !important;
-    }
-  }
-  .apexcharts-xcrosshairs {
-    stroke: var(--color-gray-200) !important;
-    .dark & {
-      stroke: var(--color-gray-700) !important;
     }
   }
   .apexcharts-ycrosshairs {
@@ -2643,9 +2622,6 @@
   .text-yellow-400 {
     color: var(--color-yellow-400);
   }
-  .lowercase {
-    text-transform: lowercase;
-  }
   .uppercase {
     text-transform: uppercase;
   }
@@ -2794,6 +2770,13 @@
       }
     }
   }
+  .hover\:bg-green-800 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-green-800);
+      }
+    }
+  }
   .hover\:bg-red-500 {
     &:hover {
       @media (hover: hover) {
@@ -2929,6 +2912,11 @@
   .focus\:ring-gray-800 {
     &:focus {
       --tw-ring-color: var(--color-gray-800);
+    }
+  }
+  .focus\:ring-green-300 {
+    &:focus {
+      --tw-ring-color: var(--color-green-300);
     }
   }
   .focus\:ring-red-300 {

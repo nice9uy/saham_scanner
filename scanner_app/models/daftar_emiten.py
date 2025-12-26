@@ -54,3 +54,8 @@ class SettingPersen(models.Model):
     setting_persen_naik = models.IntegerField()
     setting_persen_turun = models.IntegerField()
     volume = models.IntegerField()
+
+
+class HasilScanSaham(models.Model):
+    id = models.AutoField(primary_key=True, unique=True, db_index=True)
+    kode_emiten = models.CharField(max_length=7, null=True, blank=True, db_index=True)
