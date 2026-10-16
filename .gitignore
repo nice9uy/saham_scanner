@@ -1,0 +1,8 @@
+/target
+/.run
+/.env
+/crates/frontend/dist
+# Hasil graphify (bisa dibuat ulang dengan `graphify update .`)
+/graphify-out
+# Sisa percobaan lokal
+/req.json

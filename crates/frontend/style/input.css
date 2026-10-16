@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+/* Kelas Tailwind dipakai di file Rust. */
+@source "../src";
+
+@theme {
+  --color-ink: #0e1420;
+  --color-panel: #151d2c;
+  --color-raised: #1b2537;
+  --color-line: #24304a;
+  --color-paper: #e6e1d3;
+  --color-muted: #8d97a8;
+  --color-brass: #d4a657;
+  --color-brass-soft: #d4a65722;
+  --color-up: #4fbf8b;
+  --color-down: #e5675e;
+
+  --font-display: "Bricolage Grotesque", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-ink text-paper font-sans antialiased;
+    font-feature-settings: "ss01";
+  }
+  ::selection {
+    background: var(--color-brass);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 2px;
+  }
+  input,
+  select {
+    @apply rounded-md border border-line bg-ink px-2 py-1.5 text-sm text-paper;
+  }
+  input:focus,
+  select:focus {
+    @apply border-brass outline-none;
+  }
+}
+
+@layer components {
+  .num {
+    @apply font-mono tabular-nums;
+  }
+  .panel {
+    @apply rounded-xl border border-line bg-panel;
+  }
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2 rounded-md border border-line px-3 py-1.5 text-sm text-paper transition-colors hover:border-brass hover:text-brass disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-md bg-brass px-3.5 py-1.5 text-sm font-medium text-ink transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .chip {
+    @apply rounded-full border border-line px-3 py-1 text-xs text-muted transition-colors hover:border-brass hover:text-paper;
+  }
+  .chip-active {
+    @apply border-brass bg-brass-soft text-paper;
+  }
+}
+
+/* Running trade tape */
+@keyframes tape {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.tape-track {
+  animation: tape 90s linear infinite;
+}
+.tape:hover .tape-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tape-track {
+    animation: none;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-panel), var(--color-raised), var(--color-panel));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

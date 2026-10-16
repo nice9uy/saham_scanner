@@ -1,0 +1,57 @@
+# Stack Scanner Saham untuk Podman. Jalankan lewat ./prod.sh: script itu meng-export
+# semua variabel di bawah beserta default-nya (podman-compose 1.3 tidak mengisi default
+# yang kosong atau mengandung titik dua, mis. INGEST_AT=17:00).
+name: scanner-saham
+
+services:
+  db:
+    image: docker.io/library/postgres:16
+    container_name: scanner-saham-db
+    environment:
+      POSTGRES_USER: scanner
+      # Ganti lewat DB_PASSWORD di .env sebelum database pertama kali dibuat. Mengubahnya
+      # sesudah itu juga butuh `ALTER USER scanner PASSWORD '...'` di database.
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-scanner}
+      POSTGRES_DB: scanner
+    # Dibuka ke host untuk `cargo test` dan scripts/db.sh psql.
+    ports:
+      - "${DB_PORT:-5440}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scanner -d scanner"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: localhost/scanner-saham:latest
+    container_name: scanner-saham-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://scanner:${DB_PASSWORD:-scanner}@db:5432/scanner
+      BIND_ADDR: 0.0.0.0:3000
+      STATIC_DIR: /app/dist
+      SEED_CSV: /app/data/idx_stocks.csv
+      INGEST_AT: ${INGEST_AT}
+      INGEST_CONCURRENCY: ${INGEST_CONCURRENCY}
+      BACKFILL_YEARS: ${BACKFILL_YEARS}
+      CACHE_BARS: ${CACHE_BARS}
+      LIVE_UPDATE: ${LIVE_UPDATE}
+      LIVE_GAP_SECS: ${LIVE_GAP_SECS}
+      LIVE_INTERVAL_MIN: ${LIVE_INTERVAL_MIN}
+      RUST_LOG: ${RUST_LOG}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    # Nama tetap supaya data dari versi sebelumnya (scripts/db.sh) tetap dipakai.
+    name: scanner-saham-pgdata

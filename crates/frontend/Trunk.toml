@@ -1,0 +1,13 @@
+[build]
+target = "index.html"
+dist = "dist"
+
+[serve]
+port = 8080
+
+# Saat `trunk serve`, request /api diteruskan ke backend.
+[[proxy]]
+backend = "http://localhost:3000/api"
+
+[tools]
+tailwindcss = "4.1.13"

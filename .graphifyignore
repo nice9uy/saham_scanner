@@ -1,0 +1,5 @@
+# Library pihak ketiga dan hasil build: bukan kode proyek
+crates/frontend/public/vendor/
+crates/frontend/dist/
+target/
+.run/

@@ -1,0 +1,5 @@
+# Konteks build hanya berisi hasil build; target/ berukuran beberapa GB.
+*
+!target/release/backend
+!crates/frontend/dist
+!data/idx_stocks.csv

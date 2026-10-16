@@ -1,0 +1,11 @@
+[package]
+name = "scanner-core"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+shared.workspace = true
+polars.workspace = true
+yata.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
